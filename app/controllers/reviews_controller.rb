@@ -1,4 +1,5 @@
 class ReviewsController < ApplicationController
+  before_action :authenticate_user!, only: [:new]
   def new
     @book = Book.find(params[:book_id])
     @review = Review.new
@@ -7,10 +8,11 @@ class ReviewsController < ApplicationController
     @review = Review.new(
       book_id: params[:book_id],
       user_id: current_user.id,
-      body: params["body"]
+      body: review_params["body"]
     )
     if @review.save
-      redirect_to book_url(@review.book)
+      # redirect_to book_url(@review.book)
+      redirect_to book_url(@review.book_id)
     else
       render :new
     end
